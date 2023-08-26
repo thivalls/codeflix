@@ -67,4 +67,18 @@ describe('Unit tests to Category Entity', () => {
         const category = new Category({name: 'Movies', description: 'My description', isActive: false, createdAt: new Date()});
         expect(category.isActive).toBeFalsy();
     })
+
+    it('It should be possible to change value through set description method', () => {
+        const category = new Category({name: 'Movies', description: 'My description', isActive: false, createdAt: new Date()});
+        expect(category.description).toBe('My description');
+        category['description'] = 'changed description';
+        expect(category.description).toBe('changed description');
+    })
+
+    it('It should be possible to change value through set isValid method', () => {
+        const category = new Category({name: 'Movies', description: 'My description', isActive: false, createdAt: new Date()});
+        expect(category.isActive).toBeFalsy();
+        category['isActive'] = true;
+        expect(category.isActive).toBeTruthy();
+    })
 })
