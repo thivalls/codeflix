@@ -1,66 +1,91 @@
-import { Category } from "./category";
+import { Category, CategoryProperties } from "./category";
+import { v4 as uuidv4, validate as uuidValidate } from "uuid";
 
 describe('Unit tests to Category Entity', () => {
     const props = {name: 'Movies', description: 'My description', isActive: true, createdAt: new Date()};
     const onlyRequiredProps = {name: 'Movies'};
 
-    it('Show create a category instance with only required fields', () => {
-        const category = new Category(onlyRequiredProps);
-        expect(category).toBeInstanceOf(Category);
-        expect(category.props.name).toBe(onlyRequiredProps.name);
+    let simpleCategory: any;
+    let fullCategory: any;
+    let id: string;
+
+    beforeEach(() => {
+        id = uuidv4(); 
+        simpleCategory = new Category(onlyRequiredProps);
+        fullCategory = new Category(props, id);
+    });
+
+    it('It should create a category instance with only required fields', () => {
+        expect(simpleCategory).toBeInstanceOf(Category);
+        expect(simpleCategory.name).toBe(onlyRequiredProps.name);
     })
 
-    it('Show create a category instance with all attributes', () => {
-        const category = new Category(props);
-        expect(category.props.name).toBe(props.name);
-        expect(category.props.description).toBe(props.description);
-        expect(category.props.isActive).toBe(props.isActive);
-        expect(category.props.createdAt).toBe(props.createdAt);
+    it('It should create a category instance with all attributes', () => {
+        expect(fullCategory.name).toBe(props.name);
+        expect(fullCategory.description).toBe(props.description);
+        expect(fullCategory.isActive).toBe(props.isActive);
+        expect(fullCategory.createdAt).toBe(props.createdAt);
+        expect(fullCategory.id).toBe(id);
+        expect(uuidValidate(fullCategory.id)).toBeTruthy();
     })
 
-    it('Show create a category instance with all attributes and ensure strict equal object returned', () => {
-        const category = new Category(props);
-        expect(category.props).toStrictEqual(props);
+    it('It should create a category id if id is not provided, null or undefined', () => { 
+        expect(simpleCategory.id.length).toBe(36); 
+        expect(typeof simpleCategory.id).toBe('string');
+        expect(uuidValidate(simpleCategory.id)).toBeTruthy();
+        expect(simpleCategory.id).not.toBeNull();
+
+        simpleCategory = new Category(onlyRequiredProps, null);
+        expect(simpleCategory.id.length).toBe(36); 
+        expect(typeof simpleCategory.id).toBe('string');
+        expect(uuidValidate(simpleCategory.id)).toBeTruthy();
+        expect(simpleCategory.id).not.toBeNull();
+
+        simpleCategory = new Category(onlyRequiredProps, undefined);
+        expect(simpleCategory.id.length).toBe(36); 
+        expect(typeof simpleCategory.id).toBe('string');
+        expect(uuidValidate(simpleCategory.id)).toBeTruthy();
+        expect(simpleCategory.id).not.toBeNull();
+    })
+
+    it('It should create a category instance with all attributes and ensure strict equal object returned', () => {
+        expect(fullCategory.props).toStrictEqual(props);
     })
 
     it('It should get name through get name method', () => {
-        const category = new Category(props);
-        expect(category.name).toBe(props.name);
+        expect(fullCategory.name).toBe(props.name);
     })
 
     it('It should get description through get description method', () => {
-        const category = new Category(props);
-        expect(category.description).toBe(props.description);
+        expect(fullCategory.description).toBe(props.description);
     })
 
     it('It should return null if description is not provided', () => {
         const {description, ...rest} = props;
-        const category = new Category(rest);
-        expect(category.description).toBe(null);
+        const categoryWithoutDescription = new Category(rest);
+        expect(categoryWithoutDescription.description).toBe(null);
     })
 
     it('It should get isActive through get isActive method', () => {
-        const category = new Category(props);
-        expect(category.isActive).toBe(props.isActive);
+        expect(fullCategory.isActive).toBe(props.isActive);
     })
 
     it('It should return undefined if isActive is not provided', () => {
         const {isActive, ...rest} = props;
-        const category = new Category(rest);
-        expect(category.isActive).toBe(true);
-        expect(category.isActive).not.toBeNull();
+        const categoryWithoutIsActive = new Category(rest);
+        expect(categoryWithoutIsActive.isActive).toBe(true);
+        expect(categoryWithoutIsActive.isActive).not.toBeNull();
     })
 
     it('It should get createdAt through get createdAt method', () => {
-        const category = new Category(props);
-        expect(category.createdAt).toBe(props.createdAt);
+        expect(fullCategory.createdAt).toBe(props.createdAt);
     })
 
     it('It should return undefined if createdAt is not provided', () => {
         const {createdAt, ...rest} = props;
-        const category = new Category(rest);
-        expect(category.createdAt).toBeInstanceOf(Date);
-        expect(category.createdAt).not.toBeNull();
+        const categoryWithoutCreatedAt = new Category(rest);
+        expect(categoryWithoutCreatedAt.createdAt).toBeInstanceOf(Date);
+        expect(categoryWithoutCreatedAt.createdAt).not.toBeNull();
     })
 
     it('It should be possible to create a category with isActive false', () => {
@@ -69,16 +94,14 @@ describe('Unit tests to Category Entity', () => {
     })
 
     it('It should be possible to change value through set description method', () => {
-        const category = new Category({name: 'Movies', description: 'My description', isActive: false, createdAt: new Date()});
-        expect(category.description).toBe('My description');
-        category['description'] = 'changed description';
-        expect(category.description).toBe('changed description');
+        expect(fullCategory.description).toBe('My description');
+        fullCategory['description'] = 'changed description';
+        expect(fullCategory.description).toBe('changed description');
     })
 
     it('It should be possible to change value through set isValid method', () => {
-        const category = new Category({name: 'Movies', description: 'My description', isActive: false, createdAt: new Date()});
-        expect(category.isActive).toBeFalsy();
-        category['isActive'] = true;
-        expect(category.isActive).toBeTruthy();
+        expect(fullCategory.isActive).toBeTruthy();
+        fullCategory['isActive'] = false;
+        expect(fullCategory.isActive).toBeFalsy();
     })
 })
