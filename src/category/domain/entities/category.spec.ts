@@ -1,4 +1,5 @@
-import { Category, CategoryProperties } from "./category";
+import ID from "../../../@shared/unique-identity-id-vo";
+import { Category } from "./category";
 import { v4 as uuidv4, validate as uuidValidate } from "uuid";
 
 describe('Unit tests to Category Entity', () => {
@@ -20,32 +21,41 @@ describe('Unit tests to Category Entity', () => {
         expect(simpleCategory.name).toBe(onlyRequiredProps.name);
     })
 
+    it('It should create a category instance with a valid uuid', () => {
+        const catWithId = new Category(props, 'fb46e368-c875-4c8a-af26-406fb730c8ef')
+        expect(catWithId.name).toBe(props.name);
+        expect(catWithId.description).toBe(props.description);
+        expect(catWithId.isActive).toBe(props.isActive);
+        expect(catWithId.createdAt).toBe(props.createdAt);
+        expect(uuidValidate(catWithId.id.id)).toBeTruthy();
+    })
+
     it('It should create a category instance with all attributes', () => {
         expect(fullCategory.name).toBe(props.name);
         expect(fullCategory.description).toBe(props.description);
         expect(fullCategory.isActive).toBe(props.isActive);
         expect(fullCategory.createdAt).toBe(props.createdAt);
-        expect(fullCategory.id).toBe(id);
-        expect(uuidValidate(fullCategory.id)).toBeTruthy();
+        expect(fullCategory.id.id).toBe(id);
+        expect(uuidValidate(fullCategory.id.id)).toBeTruthy();
     })
 
     it('It should create a category id if id is not provided, null or undefined', () => { 
-        expect(simpleCategory.id.length).toBe(36); 
-        expect(typeof simpleCategory.id).toBe('string');
-        expect(uuidValidate(simpleCategory.id)).toBeTruthy();
-        expect(simpleCategory.id).not.toBeNull();
+        expect(simpleCategory.id.id.length).toBe(36); 
+        expect(typeof simpleCategory.id.id).toBe('string');
+        expect(uuidValidate(simpleCategory.id.id)).toBeTruthy();
+        expect(simpleCategory.id.id).not.toBeNull();
 
         simpleCategory = new Category(onlyRequiredProps, null);
-        expect(simpleCategory.id.length).toBe(36); 
-        expect(typeof simpleCategory.id).toBe('string');
-        expect(uuidValidate(simpleCategory.id)).toBeTruthy();
-        expect(simpleCategory.id).not.toBeNull();
+        expect(simpleCategory.id.id.length).toBe(36); 
+        expect(typeof simpleCategory.id.id).toBe('string');
+        expect(uuidValidate(simpleCategory.id.id)).toBeTruthy();
+        expect(simpleCategory.id.id).not.toBeNull();
 
         simpleCategory = new Category(onlyRequiredProps, undefined);
-        expect(simpleCategory.id.length).toBe(36); 
-        expect(typeof simpleCategory.id).toBe('string');
-        expect(uuidValidate(simpleCategory.id)).toBeTruthy();
-        expect(simpleCategory.id).not.toBeNull();
+        expect(simpleCategory.id.id.length).toBe(36); 
+        expect(typeof simpleCategory.id.id).toBe('string');
+        expect(uuidValidate(simpleCategory.id.id)).toBeTruthy();
+        expect(simpleCategory.id.id).not.toBeNull();
     })
 
     it('It should create a category instance with all attributes and ensure strict equal object returned', () => {
