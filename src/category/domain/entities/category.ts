@@ -24,6 +24,7 @@ export class Category {
 
     constructor(props: CategoryProperties, id?: string) {
         this.categoryId = props.categoryId;
+        this.name = props.name;
         this.description = props.description ?? null;
         this.isActive = props.isActive ?? true;
         this.createdAt = props.createdAt ?? new Date();
