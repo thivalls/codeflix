@@ -1,7 +1,7 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "catalog videos admin",
+  "description": "micro videos admin",
   "main": "index.js",
   "scripts": {
     "ts-node": "ts-node",

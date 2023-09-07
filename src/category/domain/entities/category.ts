@@ -1,42 +1,61 @@
 import ID from "../../../@shared/unique-identity-id-vo"
 
 export type CategoryProperties = {
+    categoryId?: string
     name: string
     description?: string
     isActive?: boolean
     createdAt?: Date
 }
 
+export type CategoryFactoryProperties = {
+    name: string
+    description?: string | null
+    isActive?: boolean
+}
+
 export class Category {
-    public readonly id: ID;
-    constructor(public readonly props: CategoryProperties, id?: string) {
-        this.id = ID.create(id);
-        this.description = props.description;
-        this.isActive = props.isActive;
-        this.props.createdAt = props.createdAt ?? new Date;
+
+    categoryId: string;
+    name: string;
+    description: string | null;
+    isActive: boolean;
+    createdAt: Date;
+
+    constructor(props: CategoryProperties, id?: string) {
+        this.categoryId = props.categoryId;
+        this.description = props.description ?? null;
+        this.isActive = props.isActive ?? true;
+        this.createdAt = props.createdAt ?? new Date();
     }
 
-    get name(): string {
-        return this.props.name;
+    static create(props: CategoryFactoryProperties): Category {
+        return new Category(props);
     }
 
-    get description(): string | undefined {
-        return this.props.description;
+    public changeName(name: string): void {
+        this.name = name;
     }
 
-    get isActive(): boolean | undefined {
-        return this.props.isActive;
+    public changeDescription(description: string): void {
+        this.description = description;
     }
 
-    get createdAt(): Date | undefined {
-        return this.props.createdAt;
+    public activate(): void {
+        if(!this.isActive) this.isActive = true;
+    }
+    
+    public deactivate(): void {
+        if(this.isActive) this.isActive = false;
     }
 
-    private set description(description: string) {
-        this.props.description = description ?? null;
-    }
-
-    private set isActive(isActive: boolean) {
-        this.props.isActive = isActive ?? true;
+    public toJSON(): CategoryProperties {
+        return {
+            categoryId: this.categoryId,
+            name: this.name,
+            description: this.description,
+            isActive: this.isActive,
+            createdAt: this.createdAt,
+        }
     }
 }
