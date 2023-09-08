@@ -1,4 +1,4 @@
-import ID from "./unique-identity-id-vo";
+import ID from "./abstract-value-object";
 import { validate as uuidValidate } from "uuid";
 
 describe('Unique identifier uuid unit test', () => {

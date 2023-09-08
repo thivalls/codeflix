@@ -1,4 +1,4 @@
-import ID from "../../../@shared/unique-identity-id-vo"
+import ID from "../../../@shared/abstract-value-object"
 
 export type CategoryProperties = {
     categoryId?: string
